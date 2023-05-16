@@ -64,4 +64,5 @@ const fnDone = function (sett) {
         fnModSet(id, ch)
       }
     })
+    .trigger('change')
 }

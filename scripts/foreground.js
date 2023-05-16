@@ -43,6 +43,7 @@ sn.cs.Base = swVersion
 sn.cs.Tb = sn.cs.Base + '-toolbar'
 sn.id.Style = sn.cs.Base + '-style'
 sn.id.Min = sn.cs.Base + '-style-min'
+sn.id.setHereBtn = sn.cs.Base + '-set-here-btn'
 
 fnModSet = function (sett) {
   if (sett == null || sett == undefined) {
@@ -82,5 +83,12 @@ fnModSet = function (sett) {
     })
   } else {
     $('#' + sn.id.Min).remove()
+  }
+
+  if (sett && sett.setHereBtn) {
+    $('#' + sn.id.setHereBtn).remove()
+    $('body').append('<script id="' + sn.id.setHereBtn + '"></script>')
+  } else {
+    $('#' + sn.id.setHereBtn).remove()
   }
 }

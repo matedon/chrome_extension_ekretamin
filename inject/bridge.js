@@ -13,15 +13,15 @@ const fnObsDisconnect = function () {
 const fnObsRow = function(sel, fn, delay) {
   // console.log('fnObsRow call', sel)
   if (typeof delay === typeof void 0) {
-  delay = 300
+    delay = 300
   }
   obs.push($.initialize(sel, function () {
-  const self = this
-  // console.log('fnObsRow init', sel)
-  setTimeout(function () {
-    // console.log('fnObsRow run', sel)
-    fn.call(self)
-  }, delay)
+    const self = this
+    // console.log('fnObsRow init', sel)
+    setTimeout(function () {
+      // console.log('fnObsRow run', sel)
+      fn.call(self)
+    }, delay)
   }))
 }
 
@@ -50,59 +50,91 @@ sn.cs.TbDays = sn.cs.Tb + '-days'
 sn.cs.Cell = sn.cs.Base + '-cell'
 sn.id.Style = sn.cs.Base + '-style'
 sn.id.Min = sn.cs.Base + '-style-min'
+sn.id.setHereBtn = sn.cs.Base + '-set-here-btn'
 
-let $snip = $()
+const $body = $('body')
 const fnToolbar = function () {
-    $snip = $('.' + sn.cs.Tb)
-    $snip.find('.' + sn.cs.TbStop).on('click', function () {
+    $body.on('click', '.' + sn.cs.TbStop, function () {
         fnObsDisconnect()
     })
-    $snip.find('.' + sn.cs.TbDays).on('click', function () {
+    $body.on('click', '.' + sn.cs.TbDays, function () {
         $(this).toggleClass(sn.cs.TbBtnAct)
     })
-    $snip.find('.' + sn.cs.TbClr).on('click', function () {
-        $snip.find(':input').val('')
-        $snip.find('.' + sn.cs.TbDays).removeClass(sn.cs.TbBtnAct)
+    $body.on('click', '.' + sn.cs.TbClr, function () {
+        $(this).closest('.' + sn.cs.Tb).find(':input').val('')
+        $(this).closest('.' + sn.cs.Tb).find('.' + sn.cs.TbDays).removeClass(sn.cs.TbBtnAct)
         $('.fc-time-grid-event').removeClass(sn.cs.Cell)
-    }).trigger('click')
-    $snip.find('.' + sn.cs.TbFind).on('click', function () {
+    })
+    $body.on('click', '.' + sn.cs.TbFind, function () {
         const $btn = $(this)
-        $snip.find('button').removeClass(sn.cs.Cell)
+        $(this).closest('.' + sn.cs.Tb).find('button').removeClass(sn.cs.Cell)
         $btn.addClass(sn.cs.Cell)
         findFilterOra()
     })
-    $snip.find('.' + sn.cs.TbDel).on('click', function () {
+    $body.on('click', '.' + sn.cs.TbDel, function () {
         const $btn = $(this)
-        $snip.find('button').removeClass(sn.cs.Cell)
+        $(this).closest('.' + sn.cs.Tb).find('button').removeClass(sn.cs.Cell)
         $btn.addClass(sn.cs.Cell)
         if (confirm('Delete ' + $('.fc-time-grid-event.' + sn.cs.Cell).length + '?')) {
         delNextOra()
         }
     })
-    $snip.find('.' + sn.cs.TbNap).on('click', function () {
+    $body.on('click', '.' + sn.cs.TbNap, function () {
         const $btn = $(this)
-        $snip.find('button').removeClass(sn.cs.Cell)
+        $(this).closest('.' + sn.cs.Tb).find('button').removeClass(sn.cs.Cell)
         $btn.addClass(sn.cs.Cell)
         if (confirm('Naplóz ' + findFilterOra().length + '?')) {
         napNextOra()
         }
     })
-    $snip.find('.' + sn.cs.TbStop).on('click', function () {
+    $body.on('click', '.' + sn.cs.TbStop, function () {
         const $btn = $(this)
         $('.fc-time-grid-event').removeClass(sn.cs.Cell)
-        $snip.find('button').removeClass(sn.cs.Cell)
+        $(this).closest('.' + sn.cs.Tb).find('button').removeClass(sn.cs.Cell)
         $btn.addClass(sn.cs.Cell)
     })
-    $snip.find('.' + sn.cs.TbClose).on('click', function () {
+    $body.on('click', '.' + sn.cs.TbClose, function () {
         $('.' + sn.cs.Tb).remove()
         $('#' + sn.id.Style).remove()
         $('.fc-time-grid-event').removeClass(sn.cs.Cell)
     })
-    $snip.find('.' + sn.cs.TbDev).on('click', function () {
-      
+    $body.on('click', '.' + sn.cs.TbDev, function () {
+      alert('dev')
     })
 }
 fnToolbar()
+
+$.initialize('.mulasztasGridColumnHeaderJelen', function () {
+  if ($('#' + sn.id.setHereBtn).length == 0) return false
+  const $th = $(this)
+  const $tp = $th.parent()
+  const $mn = $tp.closest('#MulasztasokNaplozasaGrid')
+  $tp.find('.mulasztasGridColumnHeaderJelen').text('Jelen').css('width', 'auto')
+  $tp.find('.mulasztasGridColumnHeaderUres').text('Üres').css('width', 'auto')
+  $('<div></div>')
+    .addClass('mulasztasGridColumnHeader')
+    .text('Okos')
+    .css({
+      'width': 'auto',
+      'padding': '2px 10px 4px 10px',
+      'margin-top': '2px',
+      'margin-left': '4px',
+      'border': '1px solid #C5D3E2',
+      'background-color': '#bada55'
+    })
+    .on('click', function () {
+      $mn
+        .find('[data-inputparentgrid="MulasztasokNaplozasaGrid"]')
+        .each(function () {
+          const $self = $(this)
+          const $act = $self.find('.activebar')
+          if ($act.length == 0) {
+            $self.find('li[val=1498]').trigger('click')
+          }
+        })
+    })
+    .appendTo($tp)
+})
 
 const findFilterOra = function () {
     let $mindenOra = $('body').find('.fc-title').closest('.fc-time-grid-event')
@@ -170,13 +202,13 @@ const findFilterOra = function () {
   const delNextOra = function () {
     const $orak = findFilterOra()
     if ($orak.length == 0) {
-      $snip.find('.' + sn.cs.TbStop).trigger('click')
+      $('.' + sn.cs.TbStop).trigger('click')
       return false
     }
-    if ($snip.find('.' + sn.cs.TbStop).hasClass(sn.cs.Cell)) {
+    if ($('.' + sn.cs.TbStop).hasClass(sn.cs.Cell)) {
       return false
     }
-    $snip.find('.' + sn.cs.TbVal).val($orak.length)
+    $('.' + sn.cs.TbVal).val($orak.length)
     const fctLen = $('.fc-title').length
     fnObsDisconnect()
     fnObsRow('#modOrarendiOraDeleteDay', function () {
@@ -197,13 +229,13 @@ const findFilterOra = function () {
   const napNextOra = function () {
     const $orak = findFilterOra()
     if ($orak.length == 0) {
-      $snip.find('.' + sn.cs.TbStop).trigger('click')
+      $('.' + sn.cs.TbStop).trigger('click')
       return false
     }
-    if ($snip.find('.' + sn.cs.TbStop).hasClass(sn.cs.Cell)) {
+    if ($('.' + sn.cs.TbStop).hasClass(sn.cs.Cell)) {
       return false
     }
-    $snip.find('.' + sn.cs.TbVal).val($orak.length)
+    $('.' + sn.cs.TbVal).val($orak.length)
     const fctLen = $orak.length
     fnObsDisconnect()
     fnObsRow('#tanoraMuveletWindow', function () {
@@ -213,17 +245,22 @@ const findFilterOra = function () {
         .val($('.' + sn.cs.TbTop).val())
         .trigger('keyup')
         .trigger('focusout')
-      if ($snip.find('.' + sn.cs.TbPres).val()[0] == '1') {
-        $dial.find('.mulasztasGridColumnHeaderJelen').trigger('click')
+      if ($('.' + sn.cs.TbPres).val()[0] == '1') {
+        $dial
+          .find('#MulasztasokNaplozasaGrid')
+          .find('.mulasztasGridColumnHeaderJelen').trigger('click')
       }
-      if ($snip.find('.' + sn.cs.TbPres).val()[0] == '2') {
-        $dial.find('[data-inputparentgrid="MulasztasokNaplozasaGrid"]').each(function () {
-          const $self = $(this)
-          const $act = $self.find('.activebar')
-          if ($act.length == 0) {
-            $self.find('li[val=1498]').trigger('click')
-          }
-        })
+      if ($('.' + sn.cs.TbPres).val()[0] == '2') {
+        $dial
+          .find('#MulasztasokNaplozasaGrid')
+          .find('[data-inputparentgrid="MulasztasokNaplozasaGrid"]')
+          .each(function () {
+            const $self = $(this)
+            const $act = $self.find('.activebar')
+            if ($act.length == 0) {
+              $self.find('li[val=1498]').trigger('click')
+            }
+          })
       }
       let submitTimer = setTimeout(function () {
         $dial.find('#naplozas').trigger('click')
