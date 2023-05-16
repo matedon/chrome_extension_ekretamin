@@ -1,0 +1,75 @@
+.main-header {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    z-index: 10;
+    padding: 10px;
+    margin-bottom: 50px;
+  }
+  .main-content {
+    padding-bottom: 140px;
+  }
+  .navbar-brand {
+    display: none;
+  }
+  #mb1_menudiv {
+    padding-left: 0;
+  }
+  .navbar .container-fluid {
+    padding: 0;
+  }
+  .menu-icon br {
+    display: none;
+  }
+  .menu-icon i.fa {
+    display: none;
+  }
+  .main-menu ul.navbar-nav>li {
+    height: auto;
+  }
+  #layout_navigationBar {
+    height: 40px;
+  }
+  .main-wrapper {
+    padding: 0;
+    width: 100%;
+  }
+  .content-container {
+    padding: 0;
+  }
+  
+  .sidebar-container.sidebar-open {
+    padding: 5px;
+    padding-right: 20px;
+  }
+  .fc-day-header {
+    text-align: justify;
+  }
+  .fc-day-header br {
+    display: inline;
+    content: ' ';
+    padding: 0 3px;
+  }
+  .fc-row.fc-widget-header {
+    height: 2rem;
+  }
+  .fc-center h2 {
+    font-size: inherit;
+  }
+  .k-widget.k-combobox.k-header.calendarComboBox {
+    padding: 0;
+    height: 25px;
+  }
+  .context-menu-icon::before {
+    font-family: inherit;
+    content: '●';
+    color: inherit;
+    top: 45%;
+  }
+  
+  
+  
+  
+  
+  

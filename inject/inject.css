@@ -1,0 +1,34 @@
+.snip-ktxc9364-toolbar{
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    width: 400px;
+    z-index: 999999;
+    background: rgba(255, 255, 200, 0.8);
+    padding: 2px;
+}
+.snip-ktxc9364-toolbar input {
+    width: 50px;
+    text-align: center;
+}
+.snip-ktxc9364-toolbar select {
+    width: 50px;
+}
+.snip-ktxc9364-toolbar button {
+    width: 50px;
+     background-color: #ddd;
+     border: 1px solid #666;
+}
+.snip-ktxc9364-toolbar button.snip-ktxc9364-toolbar-btn-active {
+    border: 1px solid orange;
+    background-color: white;
+}
+.snip-ktxc9364-cell {
+    border: 2px dashed red !important;
+}
+.snip-ktxc9364-toolbar > * {
+    height: 24px;
+    margin: 1px;
+    padding: 2px;
+    box-sizing: border-box;
+}
