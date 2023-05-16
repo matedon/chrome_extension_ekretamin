@@ -20,14 +20,17 @@
         "inject/inject.html",
         "inject/inject.css",
         "inject/min.css",
-        "inject/data.bridge.js"
+        "inject/jquery.initalize.js",
+        "inject/bridge.js"
     ],
     "content_scripts": [{
+        "run_at": "document_idle",
         "js": [
             "scripts/jquery.js",
-            "scripts/jquery.initalize.js",
             "scripts/foreground.js"
         ],
-        "matches": ["https://*.e-kreta.hu/*"]
+        "matches": [
+            "https://*.e-kreta.hu/Orarend/*"
+        ]
     }]
 }

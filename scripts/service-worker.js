@@ -8,15 +8,3 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         console.log(request.message)
     }
 })
-
-/*
-chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    // Execute script in the current tab
-    chrome.scripting.executeScript({
-        target: { tabId: tabs[0].id },
-        //executeScript doesn't work with extension files
-        //Error: Cannot access a chrome:// URL
-        //files: [ "inject/data.bridge.js" ]
-    })
-})
-*/

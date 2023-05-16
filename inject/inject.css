@@ -1,4 +1,4 @@
-.snip-ktxc9364-toolbar{
+.swVersion-toolbar {
     position: fixed;
     top: 30px;
     right: 30px;
@@ -7,26 +7,26 @@
     background: rgba(255, 255, 200, 0.8);
     padding: 2px;
 }
-.snip-ktxc9364-toolbar input {
+.swVersion-toolbar input {
     width: 50px;
     text-align: center;
 }
-.snip-ktxc9364-toolbar select {
+.swVersion-toolbar select {
     width: 50px;
 }
-.snip-ktxc9364-toolbar button {
+.swVersion-toolbar button {
     width: 50px;
      background-color: #ddd;
      border: 1px solid #666;
 }
-.snip-ktxc9364-toolbar button.snip-ktxc9364-toolbar-btn-active {
+.swVersion-toolbar button.swVersion-toolbar-btn-active {
     border: 1px solid orange;
     background-color: white;
 }
-.snip-ktxc9364-cell {
+.swVersion-cell {
     border: 2px dashed red !important;
 }
-.snip-ktxc9364-toolbar > * {
+.swVersion-toolbar > * {
     height: 24px;
     margin: 1px;
     padding: 2px;
