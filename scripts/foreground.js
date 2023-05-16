@@ -127,7 +127,7 @@ sn.id.Style = sn.cs.Base + '-style'
 sn.id.Min = sn.cs.Base + '-style-min'
 
 let $snip = $()
-const fnToolbar = function () {    
+const fnToolbar = function () {
     $snip = $('.' + sn.cs.Tb)
     $snip.find('.' + sn.cs.TbStop).on('click', function () {
         fnObsDisconnect()
