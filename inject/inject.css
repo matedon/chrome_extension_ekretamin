@@ -1,6 +1,6 @@
 .swVersion-toolbar {
     position: fixed;
-    top: 30px;
+    top: 41px;
     right: 30px;
     width: 400px;
     z-index: 999999;
@@ -40,6 +40,9 @@
 .swVersion-toolbar-row {
     display: flex;
     justify-content: space-between;
+}
+.swVersion-toolbar-row.swVersion-hidden {
+    display: none;
 }
 .swVersion-toolbar-row > * {
     height: 24px;
