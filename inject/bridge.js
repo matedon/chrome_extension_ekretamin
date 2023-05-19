@@ -63,6 +63,26 @@ try {
 } catch (e) {
   brigeDATA = {}
 }
+if (Object.keys(brigeDATA).length == 0) {
+  brigeDATA.keeps = {
+    '/Orarend/AdminOsztalyOrarend': {
+      'osztaly': {
+        'sel': '#Osztaly_listbox li[role="option"]'
+      },
+      'het': {
+        'sel': '#FullCalendar-0_tanevHetek_listbox li[role="option"]' 
+      }
+    },
+    '/Orarend/AdminTanariOrarend': {
+      'tanar': {
+        'sel': '#Tanar_listbox li[role="option"]'
+      },
+      'het': {
+        'sel': '#FullCalendar-0_tanevHetek_listbox li[role="option"]' 
+      }
+    }
+  }
+}
 console.log('brigeDATA', brigeDATA)
 
 const fnFilterKeep = function () {
@@ -71,22 +91,7 @@ const fnFilterKeep = function () {
     brigeDATA.keeps = {}
   }
   if (brigeDATA.keeps[loc] == undefined) {
-    brigeDATA.keeps[loc] = {}
-  }
-  if (brigeDATA.keeps[loc].osztaly == undefined) {
-    brigeDATA.keeps[loc].osztaly = {
-      'sel': '#Osztaly_listbox li[role="option"]'
-    }
-  }
-  if (brigeDATA.keeps[loc].tanar == undefined) {
-    brigeDATA.keeps[loc].tanar = {
-      'sel': '#Tanar_listbox li[role="option"]'
-    }
-  }
-  if (brigeDATA.keeps[loc].het == undefined) {
-    brigeDATA.keeps[loc].het = {
-      'sel': '#FullCalendar-0_tanevHetek_listbox li[role="option"]'
-    }
+    return false
   }
   let submitTime
   $.each(brigeDATA.keeps[loc], function (i, ko) {
@@ -110,7 +115,7 @@ const fnFilterKeep = function () {
           ino.disconnect()
           console.log('submitTime SUBMIT')
           $('#searchPanelBtn').trigger('click')
-        }, 1000)
+        }, 300)
       }
     })
   })
