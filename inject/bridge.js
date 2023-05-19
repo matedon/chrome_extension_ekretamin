@@ -6,7 +6,7 @@
 let obs = [] // array for $.initialize.disconnect
 const fnObsDisconnect = function () {
   $.each(obs, function (i, o) {
-  o.disconnect()
+    o.disconnect()
   })
   obs = []
 }
@@ -53,6 +53,68 @@ sn.id.Style = sn.cs.Base + '-style'
 sn.id.Min = sn.cs.Base + '-style-min'
 sn.id.setHereBtn = sn.cs.Base + '-set-here-btn'
 sn.id.setFilterKeep = sn.cs.Base + '-set-filter-keep'
+
+let brigeDATA = {}
+try {
+  brigeDATA = JSON.parse(localStorage.getItem(swVersion))
+  if (!brigeDATA) { // If localStorage is valid but empty string
+    brigeDATA = {}  
+  }
+} catch (e) {
+  brigeDATA = {}
+}
+console.log('brigeDATA', brigeDATA)
+
+const fnFilterKeep = function () {
+  const loc = window.location.pathname
+  if (brigeDATA.keeps == undefined) {
+    brigeDATA.keeps = {}
+  }
+  if (brigeDATA.keeps[loc] == undefined) {
+    brigeDATA.keeps[loc] = {}
+  }
+  if (brigeDATA.keeps[loc].osztaly == undefined) {
+    brigeDATA.keeps[loc].osztaly = {
+      'sel': '#Osztaly_listbox li[role="option"]'
+    }
+  }
+  if (brigeDATA.keeps[loc].tanar == undefined) {
+    brigeDATA.keeps[loc].tanar = {
+      'sel': '#Tanar_listbox li[role="option"]'
+    }
+  }
+  if (brigeDATA.keeps[loc].het == undefined) {
+    brigeDATA.keeps[loc].het = {
+      'sel': '#FullCalendar-0_tanevHetek_listbox li[role="option"]'
+    }
+  }
+  let submitTime
+  $.each(brigeDATA.keeps[loc], function (i, ko) {
+    if (ko.att == undefined) {
+      ko.att = 'text'
+    }
+    if (ko.evt == undefined) {
+      ko.evt = 'click'
+    }
+    $body.on(ko.evt + '.' + sn.id.setFilterKeep, ko.sel, function () {
+      const $th = $(this)
+      ko.val = $th.text()
+      localStorage.setItem(swVersion, JSON.stringify(brigeDATA))
+    })
+    const ino = $.initialize(ko.sel, function () {
+      const $th = $(this)
+      if (ko.val && ko.val == $th.text()) {
+        $th.trigger(ko.evt)
+        clearTimeout(submitTime)
+        submitTime = setTimeout(function () {
+          ino.disconnect()
+          console.log('submitTime SUBMIT')
+          $('#searchPanelBtn').trigger('click')
+        }, 1000)
+      }
+    })
+  })
+}
 
 const $body = $('body')
 const fnToolbar = function () {
@@ -122,6 +184,10 @@ $().ready(function () {
     }
   })
   fnToolbar()
+
+  if ($('#' + sn.id.setFilterKeep).length) {
+    fnFilterKeep()
+  }
 })
 
 $.initialize('.mulasztasGridColumnHeaderJelen', function () {

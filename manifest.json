@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "eKretaMin - Chrome Extension for E-Kreta",
     "description": "Unofficial Tools for e-kreta.hu users and administrators. When you use this app, you are responsible for any harm it may cause and the developer is not liable!",
-    "version": "0.271.12",
+    "version": "0.272.31",
     "icons": {
         "16": "logo/logo-16.png",
         "48": "logo/logo-48.png",

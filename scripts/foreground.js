@@ -24,13 +24,13 @@ $().ready(function () {
   $.get({
     'url' : chrome.runtime.getURL('inject/jquery.initalize.js'),
     'success' : function (res) {
-      $('body').append('<script>' + res + '</script>')
-    }
-  })
-  $.get({
-    'url' : chrome.runtime.getURL('inject/bridge.js'),
-    'success' : function (res) {
-      $('body').append('<script>' + res + '</script>')
+      $('body').append('<script>' + res + '</script>'),
+      $.get({
+        'url' : chrome.runtime.getURL('inject/bridge.js'),
+        'success' : function (res) {
+          $('body').append('<script>' + res + '</script>')
+        }
+      })
     }
   })
 })
