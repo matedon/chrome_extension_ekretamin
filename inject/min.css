@@ -67,6 +67,9 @@
     color: inherit;
     top: 45%;
   }
+  .sideSearchPanel {
+    min-height: auto;
+  }
   
   
   
