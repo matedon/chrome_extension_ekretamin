@@ -5,30 +5,71 @@
     width: 400px;
     z-index: 999999;
     background: rgba(255, 255, 200, 0.8);
+    background: linear-gradient(#30a7cb, #bbda55);
+    padding: 0;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+}
+.swVersion-toolbar-in {
     padding: 2px;
+    margin: 4px;
 }
-.swVersion-toolbar input {
-    width: 50px;
-    text-align: center;
+.swVersion-toolbar:before,
+.swVersion-toolbar:after {
+    content: ' ';
+    display: block;
+    width: 100%;
+    height: 4px;
+    opacity: 0.8;
+    background: repeating-linear-gradient(
+        45deg,
+        yellow,
+        yellow 10px,
+        black 10px,
+        black 20px
+    );
 }
-.swVersion-toolbar select {
-    width: 50px;
+.swVersion-toolbar:before {
+    margin-top: -1px;
+    border-radius: 4px 4px 0 0;
 }
-.swVersion-toolbar button {
-    width: 50px;
-     background-color: #ddd;
-     border: 1px solid #666;
+.swVersion-toolbar:after {
+    border-radius: 0 0 4px 4px;
+    margin-bottom: -1px;
 }
-.swVersion-toolbar button.swVersion-toolbar-btn-active {
-    border: 1px solid orange;
-    background-color: white;
+.swVersion-toolbar-row {
+    display: flex;
+    justify-content: space-between;
 }
-.swVersion-cell {
-    border: 2px dashed red !important;
-}
-.swVersion-toolbar > * {
+.swVersion-toolbar-row > * {
     height: 24px;
     margin: 1px;
     padding: 2px;
     box-sizing: border-box;
+    width: 100%;
+}
+.swVersion-toolbar input,
+.swVersion-toolbar select,
+.swVersion-toolbar button {
+    border-radius: 3px;
+    color: #555;
+    border: 1px solid #aaa;
+}
+.swVersion-toolbar input {
+    text-align: center;
+}
+.swVersion-toolbar button {
+    background: #eee;
+    background: linear-gradient(#fff 10%, #eee, #ddd);
+    text-shadow: #fff 1px -1px, #fff 1px -1px, #fff 1px -1px;
+}
+.swVersion-toolbar button:hover {
+    background: white;
+    background: linear-gradient(#eee, #fff);
+}
+.swVersion-toolbar button.swVersion-toolbar-btn-active {
+    background: rgb(248, 248, 168);
+}
+.swVersion-cell {
+    border: 2px dashed red !important;
 }
