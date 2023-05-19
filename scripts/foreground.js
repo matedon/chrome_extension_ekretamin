@@ -86,17 +86,12 @@ fnModSet = function (sett) {
     $('#' + sn.id.Min).remove()
   }
 
-  if (sett && sett.setHereBtn) {
-    $('#' + sn.id.setHereBtn).remove()
-    $('body').append('<script id="' + sn.id.setHereBtn + '"></script>')
-  } else {
-    $('#' + sn.id.setHereBtn).remove()
-  }
-
-  if (sett && sett.setFilterKeep) {
-    $('#' + sn.id.setFilterKeep).remove()
-    $('body').append('<script id="' + sn.id.setFilterKeep + '"></script>')
-  } else {
-    $('#' + sn.id.setFilterKeep).remove()
-  }
+  $(['setHereBtn', 'setFilterKeep']).each(function (i, key) {
+    if (sett && sett[key]) {
+      $('#' + sn.id[key]).remove()
+      $('body').append('<script id="' + sn.id[key] + '"></script>')
+    } else {
+      $('#' + sn.id[key]).remove()
+    }
+  })
 }
