@@ -52,6 +52,7 @@ sn.cs.Cell = sn.cs.Base + '-cell'
 sn.id.Style = sn.cs.Base + '-style'
 sn.id.Min = sn.cs.Base + '-style-min'
 sn.id.setHereBtn = sn.cs.Base + '-set-here-btn'
+sn.id.setFilterKeep = sn.cs.Base + '-set-filter-keep'
 
 const $body = $('body')
 const fnToolbar = function () {
@@ -189,7 +190,7 @@ const findFilterOra = function () {
         ret[1] = false
       }
     } else {
-    ret[1] = true
+      ret[1] = true
     }
     if (nth.length) {
       if (nth.includes(oraData.fcSeg.event.hanyadikora + '')) {

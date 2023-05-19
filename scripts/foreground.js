@@ -44,6 +44,7 @@ sn.cs.Tb = sn.cs.Base + '-toolbar'
 sn.id.Style = sn.cs.Base + '-style'
 sn.id.Min = sn.cs.Base + '-style-min'
 sn.id.setHereBtn = sn.cs.Base + '-set-here-btn'
+sn.id.setFilterKeep = sn.cs.Base + '-set-filter-keep'
 
 fnModSet = function (sett) {
   if (sett == null || sett == undefined) {
@@ -53,7 +54,7 @@ fnModSet = function (sett) {
     $.ajax({
       'method' : 'GET',
       'dataType' : 'html',
-      'url' : chrome.runtime.getURL('inject/inject.html'),
+      'url' : chrome.runtime.getURL('inject/toolbar.html'),
       'success' : function (res) {
         $('.' + sn.cs.Tb).remove()
         $('body').append(res.replaceAll('swVersion', swVersion))
@@ -61,7 +62,7 @@ fnModSet = function (sett) {
     })
     $.ajax({
       'method' : 'GET',
-      'url' : chrome.runtime.getURL('inject/inject.css'),
+      'url' : chrome.runtime.getURL('inject/toolbar.css'),
       'success' : function (res) {
         $('#' + sn.id.Style).remove()
         $('body').append('<style id="' + sn.id.Style + '">' + res.replaceAll('swVersion', swVersion) + '</style>')
@@ -90,5 +91,12 @@ fnModSet = function (sett) {
     $('body').append('<script id="' + sn.id.setHereBtn + '"></script>')
   } else {
     $('#' + sn.id.setHereBtn).remove()
+  }
+
+  if (sett && sett.setFilterKeep) {
+    $('#' + sn.id.setFilterKeep).remove()
+    $('body').append('<script id="' + sn.id.setFilterKeep + '"></script>')
+  } else {
+    $('#' + sn.id.setFilterKeep).remove()
   }
 }

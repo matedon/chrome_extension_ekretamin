@@ -17,8 +17,8 @@
         "activeTab"
     ],
     "web_accessible_resources": [
-        "inject/inject.html",
-        "inject/inject.css",
+        "inject/toolbar.html",
+        "inject/toolbar.css",
         "inject/min.css",
         "inject/jquery.initalize.js",
         "inject/bridge.js"
