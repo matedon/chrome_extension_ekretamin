@@ -1,0 +1,10 @@
+#MulasztasokNaplozasaGrid .swVersion-mulasztasGridColumnHeader {
+    width: auto;
+    padding: 2px 10px 4px;
+    margin-top: 2px;
+    margin-left: 4px;
+    border: 1px solid rgb(197, 211, 226);
+}
+#MulasztasokNaplozasaGrid .swVersion-mulasztasGridColumnHeader-smart {
+    background-color: rgb(186, 218, 85);
+}

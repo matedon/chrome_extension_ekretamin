@@ -35,6 +35,9 @@ $().ready(function () {
   })
 })
 
+/**
+ * Variables common in bridge.js and foreground.js
+ */
 const sn = {
   cs: {},
   id: {}
@@ -43,7 +46,9 @@ sn.cs.Base = swVersion
 sn.cs.Tb = sn.cs.Base + '-toolbar'
 sn.id.Style = sn.cs.Base + '-style'
 sn.id.Min = sn.cs.Base + '-style-min'
+sn.id.Bridge = sn.cs.Base + '-style-bridge'
 sn.id.setHereBtn = sn.cs.Base + '-set-here-btn'
+sn.id.setHereAll = sn.cs.Base + '-set-here-all'
 sn.id.setFilterKeep = sn.cs.Base + '-set-filter-keep'
 
 fnModSet = function (sett) {
@@ -66,7 +71,6 @@ fnModSet = function (sett) {
       'success' : function (res) {
         $('#' + sn.id.Style).remove()
         $('body').append('<style id="' + sn.id.Style + '">' + res.replaceAll('swVersion', swVersion) + '</style>')
-        // fnToolbar()
       }
     })
   } else {
@@ -86,7 +90,16 @@ fnModSet = function (sett) {
     $('#' + sn.id.Min).remove()
   }
 
-  $(['setHereBtn', 'setFilterKeep']).each(function (i, key) {
+  $.ajax({
+    'method' : 'GET',
+    'url' : chrome.runtime.getURL('inject/bridge.css'),
+    'success' : function (res) {
+      $('#' + sn.id.Bridge).remove()
+      $('body').append('<style id="' + sn.id.Bridge + '">' + res.replaceAll('swVersion', swVersion) + '</style>')
+    }
+  })
+
+  $(['setHereBtn', 'setFilterKeep', 'setHereAll']).each(function (i, key) {
     if (sett && sett[key]) {
       $('#' + sn.id[key]).remove()
       $('body').append('<script id="' + sn.id[key] + '"></script>')

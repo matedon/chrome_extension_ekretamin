@@ -25,12 +25,24 @@ const fnObsRow = function(sel, fn, delay) {
   }))
 }
 
+/**
+ * Variables common in bridge.js and foreground.js
+ */
 const sn = {
   cs: {},
   id: {}
 }
 sn.cs.Base = swVersion
 sn.cs.Tb = sn.cs.Base + '-toolbar'
+sn.id.Style = sn.cs.Base + '-style'
+sn.id.Min = sn.cs.Base + '-style-min'
+sn.id.Bridge = sn.cs.Base + '-style-bridge'
+sn.id.setHereBtn = sn.cs.Base + '-set-here-btn'
+sn.id.setHereAll = sn.cs.Base + '-set-here-all'
+sn.id.setFilterKeep = sn.cs.Base + '-set-filter-keep'
+/**
+ * Variables in bridge.js
+ */
 sn.cs.TbRow = sn.cs.Tb + '-row'
 sn.cs.TbClr = sn.cs.Tb + '-btn-clr'
 sn.cs.TbDel = sn.cs.Tb + '-btn-del'
@@ -49,10 +61,6 @@ sn.cs.TbVal = sn.cs.Tb + '-kij'
 sn.cs.TbDay = sn.cs.Tb + '-day'
 sn.cs.TbDays = sn.cs.Tb + '-days'
 sn.cs.Cell = sn.cs.Base + '-cell'
-sn.id.Style = sn.cs.Base + '-style'
-sn.id.Min = sn.cs.Base + '-style-min'
-sn.id.setHereBtn = sn.cs.Base + '-set-here-btn'
-sn.id.setFilterKeep = sn.cs.Base + '-set-filter-keep'
 
 let brigeDATA = {}
 try {
@@ -200,20 +208,14 @@ $.initialize('.mulasztasGridColumnHeaderJelen', function () {
   const $th = $(this)
   const $tp = $th.parent()
   const $mn = $tp.closest('#MulasztasokNaplozasaGrid')
+  $tp.find('.mulasztasGridColumnHeader').addClass(swVersion + '-mulasztasGridColumnHeader')
   $tp.find('.mulasztasGridColumnHeaderJelen').text('Jelen').css('width', 'auto')
   $tp.find('.mulasztasGridColumnHeaderUres').text('Üres').css('width', 'auto')
-  $('<div></div>')
+  const $sm = $('<div>Okos</div>')
   .addClass('mulasztasGridColumnHeader')
-  .text('Okos')
-  .css({
-    'width': 'auto',
-    'padding': '2px 10px 4px 10px',
-    'margin-top': '2px',
-    'margin-left': '4px',
-    'border': '1px solid #C5D3E2',
-    'background-color': '#bada55'
-  })
-  .on('click', function () {
+  .addClass(swVersion + '-mulasztasGridColumnHeader')
+  .addClass(swVersion + '-mulasztasGridColumnHeader-smart')
+  .on('click.' + swVersion, function () {
     $mn
     .find('[data-inputparentgrid="MulasztasokNaplozasaGrid"]')
     .each(function () {
@@ -225,6 +227,15 @@ $.initialize('.mulasztasGridColumnHeaderJelen', function () {
     })
   })
   .appendTo($tp)
+  let time
+  if ($('#' + sn.id.setHereAll).length) {
+    $.initialize('[data-inputparentgrid="MulasztasokNaplozasaGrid"]', function () {
+      clearTimeout(time)
+      time = setTimeout(function () {
+        $sm.trigger('click.' + swVersion)
+      }, 300)
+    })
+  }
 })
 
 const findFilterOra = function () {

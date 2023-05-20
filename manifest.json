@@ -21,7 +21,8 @@
         "inject/toolbar.css",
         "inject/min.css",
         "inject/jquery.initalize.js",
-        "inject/bridge.js"
+        "inject/bridge.js",
+        "inject/bridge.css"
     ],
     "content_scripts": [{
         "run_at": "document_idle",
