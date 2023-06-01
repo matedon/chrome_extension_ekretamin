@@ -62,6 +62,8 @@ sn.cs.TbDay = sn.cs.Tb + '-day'
 sn.cs.TbDays = sn.cs.Tb + '-days'
 sn.cs.Cell = sn.cs.Base + '-cell'
 
+const findFilterStack = []
+
 let brigeDATA = {}
 try {
   brigeDATA = JSON.parse(localStorage.getItem(swVersion))
@@ -132,6 +134,7 @@ const fnFilterKeep = function () {
 const $body = $('body')
 const fnToolbar = function () {
   $body.on('click', '.' + sn.cs.TbStop, function () {
+    findFilterStack.length = 0
     fnObsDisconnect()
   })
   $body.on('click', '.' + sn.cs.TbDays, function () {
@@ -176,7 +179,7 @@ const fnToolbar = function () {
     $('.fc-time-grid-event').removeClass(sn.cs.Cell)
   })
   $body.on('click', '.' + sn.cs.TbDev, function () {
-    alert('dev')
+    delNextOra()
   })
 }
 $().ready(function () {
@@ -199,7 +202,7 @@ $().ready(function () {
   fnToolbar()
 
   if ($('#' + sn.id.setFilterKeep).length) {
-    fnFilterKeep()
+    const time = setTimeout(fnFilterKeep, 500)
   }
 })
 
@@ -238,7 +241,9 @@ $.initialize('.mulasztasGridColumnHeaderJelen', function () {
   }
 })
 
+
 const findFilterOra = function () {
+  findFilterStack.length = 0
   let $mindenOra = $('body').find('.fc-title').closest('.fc-time-grid-event')
   $mindenOra.removeClass(sn.cs.Cell)
   let dayNums = []
@@ -297,36 +302,60 @@ const findFilterOra = function () {
     $.each(ret, function (k, rr) {
       ret_all = ret_all && rr
     })
+    if (ret_all) {
+      findFilterStack.push(oraData.fcSeg.event.id)
+    }
     return ret_all
   })
+  console.log(findFilterStack)
   return $orak.addClass(sn.cs.Cell)
 }
+
+$.initialize('.fc-time-grid', function () {
+  console.log("initialize fc-time-grid")
+})
+
+let timeFcTitle = setTimeout(function () {}, 0)
+let fnFcTitleReady = function () {}
+$.initialize('.fc-title', function () {
+  console.log("initialize fc-title")
+  clearTimeout(timeFcTitle)
+  timeFcTitle = setTimeout(function () {
+    console.log('timeFcTitle fire')
+    fnFcTitleReady()
+  }, 1000)
+})
+
 const delNextOra = function () {
-  const $orak = findFilterOra()
-  if ($orak.length == 0) {
+  fnObsDisconnect()
+  if (findFilterStack.length == 0) {
     $('.' + sn.cs.TbStop).trigger('click')
     return false
   }
   if ($('.' + sn.cs.TbStop).hasClass(sn.cs.Cell)) {
     return false
   }
-  $('.' + sn.cs.TbVal).val($orak.length)
-  const fctLen = $('.fc-title').length
-  fnObsDisconnect()
+  const fsId = findFilterStack.shift()
+  $('.' + sn.cs.TbVal).val(findFilterStack.length)
+  
+  const $idOra = $('.fc-time-grid-event').filter(function () {
+    return $(this).data().fcSeg.event.id == fsId
+  })
+  if (!$idOra.length) {
+    return false
+  }
   fnObsRow('#modOrarendiOraDeleteDay', function () {
     fnObsRow('.closeYesConfirm', function () {
-      let iter = setInterval(function () {
-        if ($('.fc-title').length == fctLen - 1) {
-          clearInterval(iter)
-          fnObsDisconnect()
-          delNextOra()
-        }
-      }, 300)
+      fnFcTitleReady = function () {
+        console.log('delNextOra')
+        delNextOra()
+      }
       $(this).trigger('click')
     })
     $(this).trigger('click')
   })
-  $orak.eq(0).trigger('click')
+
+  $idOra.trigger('click')
 }
 const napNextOra = function () {
   const $orak = findFilterOra()
