@@ -31,7 +31,7 @@
             "scripts/foreground.js"
         ],
         "matches": [
-            "https://*.e-kreta.hu/Orarend/*"
+            "https://*.e-kreta.hu/*"
         ]
     }]
 }

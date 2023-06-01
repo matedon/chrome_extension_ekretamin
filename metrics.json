@@ -1,0 +1,17 @@
+{
+    "setToolbar": [
+        "/Orarend*"
+    ],
+    "setCssPro": [
+        "*"
+    ],
+    "setHereBtn": [
+        "/Orarend/TanariOrarend*"
+    ],
+    "setHereAll": [
+        "/Orarend/TanariOrarend*"
+    ],
+    "setFilterKeep": [
+        "/Orarend/AdminOsztalyOrarend"
+    ]
+}
