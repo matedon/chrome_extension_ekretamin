@@ -70,20 +70,29 @@ const findFilterStack = []
 
 let brigeDATA = {}
 const fnGetBridgeData = function () {
+  let brigeDATA_a
   try {
-    let brigeDATA_a = JSON.parse($('#' + swVersion).html())
-    let brigeDATA_b = JSON.parse(localStorage.getItem(swVersion))
-    
-    if (!brigeDATA_a) {
+    brigeDATA_a = JSON.parse($('#' + swVersion).html())
+    if (brigeDATA_a == null || brigeDATA_a == undefined) {
       brigeDATA_a = {}
     }
-    if (!brigeDATA_b) {
+  } catch (e) {
+    brigeDATA_a = {}
+  }
+  console.log('brigeDATA_a', brigeDATA_a)
+
+  let brigeDATA_b
+  try {
+    brigeDATA_b = JSON.parse(localStorage.getItem(swVersion))
+    if (brigeDATA_b == null || brigeDATA_b == undefined) {
       brigeDATA_b = {}
     }
-    brigeDATA = $.extend(true, {}, brigeDATA_a, brigeDATA_b)
   } catch (e) {
-    brigeDATA = {}
+    brigeDATA_b = {}
   }
+  console.log('brigeDATA_b', brigeDATA_b)
+  
+  brigeDATA = $.extend(true, {}, brigeDATA_b, brigeDATA_a)
   console.log('brigeDATA', brigeDATA)
 }
 $.initialize('#' + swVersion, function () {
@@ -198,24 +207,16 @@ $().ready(function () {
   })
   fnToolbar()
 
-  if ($('#' + sn.id.setFilterKeep).length) {
+  if (brigeDATA.setFilterKeep.active) {
     const time = setTimeout(fnFilterKeep, 500)
   }
 })
 
 $.initialize('.mulasztasGridColumnHeaderJelen', function () {
-  if ($('#' + sn.id.setHereBtn).length == 0) return false
   const $th = $(this)
   const $tp = $th.parent()
   const $mn = $tp.closest('#MulasztasokNaplozasaGrid')
-  $tp.find('.mulasztasGridColumnHeader').addClass(swVersion + '-mulasztasGridColumnHeader')
-  $tp.find('.mulasztasGridColumnHeaderJelen').text('Jelen').css('width', 'auto')
-  $tp.find('.mulasztasGridColumnHeaderUres').text('Üres').css('width', 'auto')
-  const $sm = $('<div>Okos</div>')
-  .addClass('mulasztasGridColumnHeader')
-  .addClass(swVersion + '-mulasztasGridColumnHeader')
-  .addClass(swVersion + '-mulasztasGridColumnHeader-smart')
-  .on('click.' + swVersion, function () {
+  fnSmartCheck = function () {
     $mn
     .find('[data-inputparentgrid="MulasztasokNaplozasaGrid"]')
     .each(function () {
@@ -225,15 +226,23 @@ $.initialize('.mulasztasGridColumnHeaderJelen', function () {
         $self.find('li[val=1498]').trigger('click')
       }
     })
-  })
-  .appendTo($tp)
+  }
+  if (brigeDATA.setHereBtn.active) {
+    $tp.find('.mulasztasGridColumnHeader').addClass(swVersion + '-mulasztasGridColumnHeader')
+    $tp.find('.mulasztasGridColumnHeaderJelen').text('Jelen').css('width', 'auto')
+    $tp.find('.mulasztasGridColumnHeaderUres').text('Üres').css('width', 'auto')
+    $('<div>Okos</div>')
+    .addClass('mulasztasGridColumnHeader')
+    .addClass(swVersion + '-mulasztasGridColumnHeader')
+    .addClass(swVersion + '-mulasztasGridColumnHeader-smart')
+    .on('click.' + swVersion, fnSmartCheck)
+    .appendTo($tp)
+  }
   let time
-  if ($('#' + sn.id.setHereAll).length) {
+  if (brigeDATA.setHereAll.active) {
     $.initialize('[data-inputparentgrid="MulasztasokNaplozasaGrid"]', function () {
       clearTimeout(time)
-      time = setTimeout(function () {
-        $sm.trigger('click.' + swVersion)
-      }, 300)
+      time = setTimeout(fnSmartCheck, 300)
     })
   }
 })

@@ -48,9 +48,6 @@ sn.id.TbCont = sn.cs.Base + '-toolbar-cont'
 sn.id.TbStyle = sn.cs.Base + '-toolbar-style'
 sn.id.Min = sn.cs.Base + '-style-min'
 sn.id.Bridge = sn.cs.Base + '-style-bridge'
-sn.id.setHereBtn = sn.cs.Base + '-set-here-btn'
-sn.id.setHereAll = sn.cs.Base + '-set-here-all'
-sn.id.setFilterKeep = sn.cs.Base + '-set-filter-keep'
 
 const wildcardCheck = function(url, pattern) {
   // Source: https://stackoverflow.com/a/51712612/1516015
@@ -133,13 +130,4 @@ const fnModSet = function (sett) {
   } else {
     $('#' + sn.id.Min).remove()
   }
-  $(['setHereBtn', 'setFilterKeep', 'setHereAll']).each(function (i, key) {
-    if (!fnSetIsActive(sett, key)) {
-      return false
-    }
-    $('#' + sn.id[key]).remove()
-    if (sett && sett[key] && sett[key].active) {
-      $('body').append('<script id="' + sn.id[key] + '"></script>')
-    }
-  })
 }
