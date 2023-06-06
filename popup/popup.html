@@ -12,40 +12,60 @@
         <strong>Settings for eKretaMin</strong>
     </header>
     <main>
-        <div class="sett-line-cont">
+        <div class="sett-line-cont" data-mod="setCssPro">
             <div class="sett-line">
-                <input type="checkbox" name="" id="setCssPro"> Sűrűbb elrendezés
+                <input type="checkbox" name="" data-mod-input> Sűrűbb elrendezés
+                <div class="sett-line-note sett-line-note--url">
+                    Itt érvényes: <div data-mod-url>
+                        <ul>
+                            <li>url 1</li>
+                            <li>url 2</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-            <div class="sett-line">
-                <input type="checkbox" name="" id="setToolbar"> Eszköztár
+            <div class="sett-line" data-mod="setToolbar">
+                <input type="checkbox" name="" data-mod-input> Eszköztár
+                <div class="sett-line-note sett-line-note--url">
+                    Itt érvényes: <div data-mod-url></div>
+                </div>
             </div>
             <div class="sett-line header">
                 Elektronikus napló
             </div>
-            <div class="sett-line">
-                <input type="checkbox" name="" id="setHereBtn">
+            <div class="sett-line" data-mod="setHereBtn">
+                <input type="checkbox" name="" data-mod-input>
                 <label for="setHereBtn">Okos Jelenlét Gomb</label>
                 <div class="sett-line-break"></div>
                 <div class="sett-line-note">Aki hiányzónak van állítva, azt már nem jelöli jelenlévőnek.</div>
+                <div class="sett-line-note sett-line-note--url">
+                    Itt érvényes: <div data-mod-url></div>
+                </div>
             </div>
-            <div class="sett-line">
-                <input type="checkbox" name="" id="setHereAll">
+            <div class="sett-line" data-mod="setHereAll">
+                <input type="checkbox" name="" data-mod-input>
                 <label for="setHereAll">Okos Jelenlét Autómata</label>
                 <div class="sett-line-break"></div>
                 <div class="sett-line-note">Automatikusan jelenlévőnek állít minden nemhiányzót.</div>
+                <div class="sett-line-note sett-line-note--url">
+                    Itt érvényes: <div data-mod-url></div>
+                </div>
             </div>
             <div class="sett-line header">
                 Adminisztrációs rendszer
             </div>
-            <div class="sett-line">
-                <input type="checkbox" name="" id="setFilterKeep">
+            <div class="sett-line" data-mod="setFilterKeep">
+                <input type="checkbox" name="" data-mod-input>
                 <label for="setFilterKeep">Szűrő megőrzése</label>
                 <div class="sett-line-break"></div>
                 <div class="sett-line-note">Emlékezzen a szürő beállíásokra (pl.: Osztály, Csoport, Tanár, Dátum). Oldal újratöltés esetén hasznos.</div>
+                <div class="sett-line-note sett-line-note--url">
+                    Itt érvényes: <div data-mod-url></div>
+                </div>
             </div>
         </div>
     </main>
     <script src="../scripts/jquery.js"></script>
-    <script src="popup.js"></script>
+    <script src="popup.js?nocache=3422"></script>
 </body>
 </html>

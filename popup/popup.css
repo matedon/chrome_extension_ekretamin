@@ -43,4 +43,27 @@ input[type="checkbox"] {
     font-size: 66%;
     text-align: justify;
     margin-top: 0.25rem;
+    width: 100%;
+}
+.sett-line-cont .sett-line .sett-line-note--url {
+    text-align: left;
+    color:grey;
+}
+.sett-line-cont .sett-line .sett-line-note--url ul {
+    margin: 0;
+    list-style: none;
+    padding-left: 4rem;
+    margin-top: -0.85rem;
+}
+.sett-line-cont .sett-line .sett-line-note--url ul li.active {
+    color: #149d28;
+}
+.sett-line-cont .sett-line .sett-line-note--url ul li:before {
+    content: '⚬';
+    display: inline-block;
+    width: 1rem;
+    text-align: center;
+}
+.sett-line-cont .sett-line .sett-line-note--url ul li.active:before {
+    content: '✓';
 }

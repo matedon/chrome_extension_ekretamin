@@ -69,21 +69,28 @@ sn.cs.Cell = sn.cs.Base + '-cell'
 const findFilterStack = []
 
 let brigeDATA = {}
-try {
-  let brigeDATA_a = JSON.parse($('#' + swVersion).html())
-  let brigeDATA_b = JSON.parse(localStorage.getItem(swVersion))
-  $('#' + swVersion).remove()
-  if (!brigeDATA_a) {
-    brigeDATA_a = {}
+const fnGetBridgeData = function () {
+  try {
+    let brigeDATA_a = JSON.parse($('#' + swVersion).html())
+    let brigeDATA_b = JSON.parse(localStorage.getItem(swVersion))
+    
+    if (!brigeDATA_a) {
+      brigeDATA_a = {}
+    }
+    if (!brigeDATA_b) {
+      brigeDATA_b = {}
+    }
+    brigeDATA = $.extend(true, {}, brigeDATA_a, brigeDATA_b)
+  } catch (e) {
+    brigeDATA = {}
   }
-  if (!brigeDATA_b) {
-    brigeDATA_b = {}
-  }
-  brigeDATA = $.extend(true, {}, brigeDATA_a, brigeDATA_b)
-} catch (e) {
-  brigeDATA = {}
+  console.log('brigeDATA', brigeDATA)
 }
-console.log('brigeDATA', brigeDATA)
+$.initialize('#' + swVersion, function () {
+  fnGetBridgeData()
+  console.log('#' + swVersion + ' brigeDATA set', brigeDATA)
+  $(this).remove()
+})
 
 const fnFilterKeep = function () {
   const loc = window.location.pathname

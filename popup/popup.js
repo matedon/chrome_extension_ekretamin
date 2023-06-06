@@ -1,3 +1,13 @@
+const wildcardCheck = function(url, pattern) {
+  if (!url || !pattern) return false
+  // Source: https://stackoverflow.com/a/51712612/1516015
+  const regExpEscape = function(s) {
+      return s.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&')
+  }
+  var patt = new RegExp('^' + pattern.split(/\*+/).map(regExpEscape).join('.*') + '$')
+  return url.match(patt) !== null && url.match(patt).length >= 1
+}
+
 const colog = function (dt) {
   // https://stackoverflow.com/a/75789301
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
@@ -58,22 +68,36 @@ const fnDone = function (sett) {
   }
 
   const fnPopup = function () {
-    $('.sett-line').find('input')
-    .each(function () {
-      const $th = $(this)
-      const id = $th.attr('id')
-      colog([id, sett[id]])
-      $th.prop('checked', sett[id].active)
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+      let url = tabs[0].url.replace('http://', '').replace('https://', '')
+      const locationPathname = '/' + url.split(/\/(.*)/s)[1]
+      
+      $('[data-mod]').each(function () {
+        const $mod = $(this)
+        const mod = $mod.data('mod')
+        colog([mod, sett[mod]])
+        $mod.find('[data-mod-input]').prop('checked', sett[mod].active)
+        $mod.find('[data-mod-url]').html('<ul><li>' + Object.keys(sett[mod].urls).join('</li><li>') + '</li></ul>')
+      })
+      .find('[data-mod-input]').on('change', function () {
+        const $th = $(this)
+        const $mod = $th.closest('[data-mod]')
+        const mod = $mod.data('mod')
+        if ($th.attr('type') == 'checkbox') {
+          const ch = $th.is(':checked')
+          fnModSet(mod, ch)
+        }
+      })
+      .trigger('change')
+      $('[data-mod-url]').find('li').each(function () {
+        let pattern = $(this).text()
+        if (wildcardCheck(locationPathname, pattern)) {
+          $(this).addClass('active')
+        }
+      })
     })
-    .on('change', function () {
-      const $th = $(this)
-      const id = $th.attr('id')
-      if ($th.attr('type') == 'checkbox') {
-        const ch = $(this).is(':checked')
-        fnModSet(id, ch)
-      }
-    })
-    .trigger('change')
+
+    
   }
   fnPopup()
 }
