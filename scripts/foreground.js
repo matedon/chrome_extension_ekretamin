@@ -44,7 +44,8 @@ const sn = {
 }
 sn.cs.Base = swVersion
 sn.cs.Tb = sn.cs.Base + '-toolbar'
-sn.id.Style = sn.cs.Base + '-style'
+sn.id.TbCont = sn.cs.Base + '-toolbar-cont'
+sn.id.TbStyle = sn.cs.Base + '-toolbar-style'
 sn.id.Min = sn.cs.Base + '-style-min'
 sn.id.Bridge = sn.cs.Base + '-style-bridge'
 sn.id.setHereBtn = sn.cs.Base + '-set-here-btn'
@@ -52,59 +53,66 @@ sn.id.setHereAll = sn.cs.Base + '-set-here-all'
 sn.id.setFilterKeep = sn.cs.Base + '-set-filter-keep'
 
 fnModSet = function (sett) {
+  console.log('foreground.js fnModSet', sett)
   if (sett == null || sett == undefined) {
     sett = {}
   }
-  if (sett && sett.setToolbar) {
+  $('#' + swVersion).remove()
+  $('body').append('<div id="' + swVersion + '">' + JSON.stringify(sett) + '</div>')
+  if ($('#' + sn.id.Bridge).length == 0) {
     $.ajax({
       'method' : 'GET',
-      'dataType' : 'html',
-      'url' : chrome.runtime.getURL('inject/toolbar.html'),
+      'url' : chrome.runtime.getURL('inject/bridge.css'),
       'success' : function (res) {
-        $('.' + sn.cs.Tb).remove()
-        $('body').append(res.replaceAll('swVersion', swVersion))
+        $('#' + sn.id.Bridge).remove()
+        $('body').append('<style id="' + sn.id.Bridge + '">' + res.replaceAll('swVersion', swVersion) + '</style>')
       }
     })
-    $.ajax({
-      'method' : 'GET',
-      'url' : chrome.runtime.getURL('inject/toolbar.css'),
-      'success' : function (res) {
-        $('#' + sn.id.Style).remove()
-        $('body').append('<style id="' + sn.id.Style + '">' + res.replaceAll('swVersion', swVersion) + '</style>')
-      }
-    })
-  } else {
-    $('.' + sn.cs.Tb).remove()
-    $('#' + sn.id.Style).remove()
   }
-  if (sett && sett.setCssPro) {
-    $.ajax({
-      'method' : 'GET',
-      'url' : chrome.runtime.getURL('inject/min.css'),
-      'success' : function (res) {
-        $('#' + sn.id.Min).remove()
-        $('body').append('<style id="' + sn.id.Min + '">' + res + '</style>')
-      }
-    })
+  if (sett && sett.setToolbar && sett.setToolbar.active) {
+    if ($('#' + sn.id.TbCont).length == 0) {
+      $.ajax({
+        'method' : 'GET',
+        'dataType' : 'html',
+        'url' : chrome.runtime.getURL('inject/toolbar.html'),
+        'success' : function (res) {
+          $('#' + sn.id.TbCont).remove()
+          $('body').append('<div id="' + sn.id.TbCont + '">' + res.replaceAll('swVersion', swVersion) + '</div>')
+        }
+      })
+    }
+    if ($('#' + sn.id.TbStyle).length == 0) {
+      $.ajax({
+        'method' : 'GET',
+        'url' : chrome.runtime.getURL('inject/toolbar.css'),
+        'success' : function (res) {
+          $('#' + sn.id.TbStyle).remove()
+          $('body').append('<style id="' + sn.id.TbStyle + '">' + res.replaceAll('swVersion', swVersion) + '</style>')
+        }
+      })
+    }
+  } else {
+    $('#' + sn.id.TbCont).remove()
+    $('#' + sn.id.TbStyle).remove()
+  }
+  if (sett && sett.setCssPro && sett.setCssPro.active) {
+    if ($('#' + sn.id.Min).length == 0) {
+      $.ajax({
+        'method' : 'GET',
+        'url' : chrome.runtime.getURL('inject/min.css'),
+        'success' : function (res) {
+          $('#' + sn.id.Min).remove()
+          $('body').append('<style id="' + sn.id.Min + '">' + res + '</style>')
+        }
+      })
+    }
   } else {
     $('#' + sn.id.Min).remove()
   }
-
-  $.ajax({
-    'method' : 'GET',
-    'url' : chrome.runtime.getURL('inject/bridge.css'),
-    'success' : function (res) {
-      $('#' + sn.id.Bridge).remove()
-      $('body').append('<style id="' + sn.id.Bridge + '">' + res.replaceAll('swVersion', swVersion) + '</style>')
-    }
-  })
-
   $(['setHereBtn', 'setFilterKeep', 'setHereAll']).each(function (i, key) {
-    if (sett && sett[key]) {
-      $('#' + sn.id[key]).remove()
+    $('#' + sn.id[key]).remove()
+    if (sett && sett[key] && sett[key].active) {
       $('body').append('<script id="' + sn.id[key] + '"></script>')
-    } else {
-      $('#' + sn.id[key]).remove()
     }
   })
 }

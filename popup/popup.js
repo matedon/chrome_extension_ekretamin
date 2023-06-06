@@ -11,11 +11,19 @@ const colog = function (dt) {
 const swVersion = 'eKretaMinSett_' + chrome.runtime.getManifest().version.replaceAll('.', '')
 chrome.storage.local.get(swVersion, function (sett) {
   colog([swVersion, sett])
-  if (sett == null || sett == undefined) {
-    fnDone()
-  } else {
-    fnDone(sett[swVersion])
+  if (sett[swVersion] == null || sett[swVersion] == undefined) {
+    sett[swVersion] = {}
   }
+  $.ajax({
+    'method' : 'GET',
+    'dataType' : 'json',
+    'url' : chrome.runtime.getURL('metrics.json'),
+    'success' : function (res) {
+      const setex = $.extend(true, {}, res, sett[swVersion])
+      colog(['metrics.json', res, setex])
+      fnDone(setex)
+    }
+  })
 })
 
 const fnDone = function (sett) {
@@ -24,14 +32,14 @@ const fnDone = function (sett) {
   }
   colog(['fnDone', 'sett', sett])
   const fnModSet = function (key, val) {
+    if (typeof key !== 'string') {
+      return false
+    }
     let options = {}
-    if (typeof key == 'object') {
-      options = key
+    options[key] = {
+      'active': val
     }
-    if (typeof key == 'string') {
-      options[key] = val
-    }
-    sett = $.extend(true, sett, options)
+    sett = $.extend(true, {}, sett, options)
     colog(['fnModSet extend', key, val, sett])
     const store = {}
     store[swVersion] = sett
@@ -49,12 +57,13 @@ const fnDone = function (sett) {
     })
   }
 
-  $('.sett-line').find('input')
+  const fnPopup = function () {
+    $('.sett-line').find('input')
     .each(function () {
       const $th = $(this)
       const id = $th.attr('id')
       colog([id, sett[id]])
-      $th.prop('checked', sett[id])
+      $th.prop('checked', sett[id].active)
     })
     .on('change', function () {
       const $th = $(this)
@@ -65,4 +74,6 @@ const fnDone = function (sett) {
       }
     })
     .trigger('change')
+  }
+  fnPopup()
 }

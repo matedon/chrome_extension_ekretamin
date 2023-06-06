@@ -1,17 +1,47 @@
 {
-    "setToolbar": [
-        "/Orarend*"
-    ],
-    "setCssPro": [
-        "*"
-    ],
-    "setHereBtn": [
-        "/Orarend/TanariOrarend*"
-    ],
-    "setHereAll": [
-        "/Orarend/TanariOrarend*"
-    ],
-    "setFilterKeep": [
-        "/Orarend/AdminOsztalyOrarend"
-    ]
+    "setToolbar": {
+        "urls": {
+            "/Orarend*": true
+        },
+        "active": false
+    },
+    "setCssPro": {
+        "urls": {
+            "*": true
+        },
+        "active": false
+    },
+    "setHereBtn": {
+        "urls": {
+            "/Orarend/TanariOrarend*": true
+        },
+        "active": false
+    },
+    "setHereAll": {
+        "urls": {
+            "/Orarend/TanariOrarend*": true
+        },
+        "active": false
+    },
+    "setFilterKeep": {
+        "urls": {
+            "/Orarend/AdminOsztalyOrarend": {
+                "osztaly": {
+                    "sel": "#Osztaly_listbox li[role='option']"
+                },
+                "het": {
+                    "sel": "#FullCalendar-0_tanevHetek_listbox li[role='option']" 
+                }
+            },
+            "/Orarend/AdminTanariOrarend": {
+                "tanar": {
+                    "sel": "#Tanar_listbox li[role='option']"
+                },
+                "het": {
+                    "sel": "#FullCalendar-0_tanevHetek_listbox li[role='option']" 
+                }
+            }
+        },
+        "active": false
+    }
 }

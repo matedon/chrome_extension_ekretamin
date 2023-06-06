@@ -32,9 +32,13 @@ const sn = {
   cs: {},
   id: {}
 }
+/**
+ * swVersion variable comes from foreground.js $().ready()
+ */
 sn.cs.Base = swVersion
 sn.cs.Tb = sn.cs.Base + '-toolbar'
-sn.id.Style = sn.cs.Base + '-style'
+sn.id.TbCont = sn.cs.Base + '-toolbar-cont'
+sn.id.TbStyle = sn.cs.Base + '-toolbar-style'
 sn.id.Min = sn.cs.Base + '-style-min'
 sn.id.Bridge = sn.cs.Base + '-style-bridge'
 sn.id.setHereBtn = sn.cs.Base + '-set-here-btn'
@@ -66,45 +70,29 @@ const findFilterStack = []
 
 let brigeDATA = {}
 try {
-  brigeDATA = JSON.parse(localStorage.getItem(swVersion))
-  if (!brigeDATA) { // If localStorage is valid but empty string
-    brigeDATA = {}  
+  let brigeDATA_a = JSON.parse($('#' + swVersion).html())
+  let brigeDATA_b = JSON.parse(localStorage.getItem(swVersion))
+  $('#' + swVersion).remove()
+  if (!brigeDATA_a) {
+    brigeDATA_a = {}
   }
+  if (!brigeDATA_b) {
+    brigeDATA_b = {}
+  }
+  brigeDATA = $.extend(true, {}, brigeDATA_a, brigeDATA_b)
 } catch (e) {
   brigeDATA = {}
-}
-if (Object.keys(brigeDATA).length == 0) {
-  brigeDATA.keeps = {
-    '/Orarend/AdminOsztalyOrarend': {
-      'osztaly': {
-        'sel': '#Osztaly_listbox li[role="option"]'
-      },
-      'het': {
-        'sel': '#FullCalendar-0_tanevHetek_listbox li[role="option"]' 
-      }
-    },
-    '/Orarend/AdminTanariOrarend': {
-      'tanar': {
-        'sel': '#Tanar_listbox li[role="option"]'
-      },
-      'het': {
-        'sel': '#FullCalendar-0_tanevHetek_listbox li[role="option"]' 
-      }
-    }
-  }
 }
 console.log('brigeDATA', brigeDATA)
 
 const fnFilterKeep = function () {
   const loc = window.location.pathname
-  if (brigeDATA.keeps == undefined) {
-    brigeDATA.keeps = {}
-  }
-  if (brigeDATA.keeps[loc] == undefined) {
+  console.log('loc', loc)
+  if (brigeDATA.setFilterKeep.urls == undefined || brigeDATA.setFilterKeep.urls[loc] == undefined) {
     return false
   }
   let submitTime
-  $.each(brigeDATA.keeps[loc], function (i, ko) {
+  $.each(brigeDATA.setFilterKeep.urls[loc], function (i, ko) {
     if (ko.att == undefined) {
       ko.att = 'text'
     }
@@ -175,11 +163,13 @@ const fnToolbar = function () {
   })
   $body.on('click', '.' + sn.cs.TbClose, function () {
     $('.' + sn.cs.Tb).remove()
-    $('#' + sn.id.Style).remove()
+    $('#' + sn.id.TbStyle).remove()
     $('.fc-time-grid-event').removeClass(sn.cs.Cell)
   })
   $body.on('click', '.' + sn.cs.TbDev, function () {
-    delNextOra()
+    // delNextOra()
+
+    console.log($('#' + swVersion).html())
   })
 }
 $().ready(function () {
@@ -337,7 +327,6 @@ const delNextOra = function () {
   }
   const fsId = findFilterStack.shift()
   $('.' + sn.cs.TbVal).val(findFilterStack.length)
-  
   const $idOra = $('.fc-time-grid-event').filter(function () {
     return $(this).data().fcSeg.event.id == fsId
   })
@@ -358,17 +347,22 @@ const delNextOra = function () {
   $idOra.trigger('click')
 }
 const napNextOra = function () {
-  const $orak = findFilterOra()
-  if ($orak.length == 0) {
+  fnObsDisconnect()
+  if (findFilterStack.length == 0) {
     $('.' + sn.cs.TbStop).trigger('click')
     return false
   }
   if ($('.' + sn.cs.TbStop).hasClass(sn.cs.Cell)) {
     return false
   }
-  $('.' + sn.cs.TbVal).val($orak.length)
-  const fctLen = $orak.length
-  fnObsDisconnect()
+  const fsId = findFilterStack.shift()
+  $('.' + sn.cs.TbVal).val(findFilterStack.length)
+  const $idOra = $('.fc-time-grid-event').filter(function () {
+    return $(this).data().fcSeg.event.id == fsId
+  })
+  if (!$idOra.length) {
+    return false
+  }
   fnObsRow('#tanoraMuveletWindow', function () {
     const $dial = $(this)
       .find('[name="Tema_input"]')
@@ -394,15 +388,12 @@ const napNextOra = function () {
       })
     }
     let submitTimer = setTimeout(function () {
-    $dial.find('#naplozas').trigger('click')
-    }, 200)
-    let iter = setInterval(function () {
-      if (findFilterOra().length == fctLen - 1) {
-        clearInterval(iter)
-        fnObsDisconnect()
-        napNextOra()
-      }
-    }, 300)
+      $dial.find('#naplozas').trigger('click')
+    }, 1000)
+    fnFcTitleReady = function () {
+      console.log('napNextOra')
+      napNextOra()
+    }
   })
-  $orak.eq(0).trigger('click')
+  $idOra.trigger('click')
 }
