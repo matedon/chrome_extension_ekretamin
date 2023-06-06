@@ -363,29 +363,29 @@ const napNextOra = function () {
   if (!$idOra.length) {
     return false
   }
-  fnObsRow('#tanoraMuveletWindow', function () {
-    const $dial = $(this)
+  fnObsRow('#MulasztasokNaplozasaGrid', function () {
+    const $grid = $(this)
+    const $dial = $grid.closest('#tanoraMuveletWindow')
+    $dial
       .find('[name="Tema_input"]')
       .trigger('focusin')
       .val($('.' + sn.cs.TbTop).val())
       .trigger('keyup')
       .trigger('focusout')
+    // console.log('#tanoraMuveletWindow', $('.' + sn.cs.TbPres).val()[0], $dial.find('#MulasztasokNaplozasaGrid'))
     if ($('.' + sn.cs.TbPres).val()[0] == '1') {
-      $dial
-        .find('#MulasztasokNaplozasaGrid')
-        .find('.mulasztasGridColumnHeaderJelen').trigger('click')
+      $grid.find('.mulasztasGridColumnHeaderJelen').trigger('click')
     }
     if ($('.' + sn.cs.TbPres).val()[0] == '2') {
-    $dial
-      .find('#MulasztasokNaplozasaGrid')
-      .find('[data-inputparentgrid="MulasztasokNaplozasaGrid"]')
-      .each(function () {
-        const $self = $(this)
-        const $act = $self.find('.activebar')
-        if ($act.length == 0) {
-          $self.find('li[val=1498]').trigger('click')
-        }
-      })
+      $grid
+        .find('[data-inputparentgrid="MulasztasokNaplozasaGrid"]')
+        .each(function () {
+          const $self = $(this)
+          const $act = $self.find('.activebar')
+          if ($act.length == 0) {
+            $self.find('li[val=1498]').trigger('click')
+          }
+        })
     }
     let submitTimer = setTimeout(function () {
       $dial.find('#naplozas').trigger('click')
