@@ -52,7 +52,30 @@ sn.id.setHereBtn = sn.cs.Base + '-set-here-btn'
 sn.id.setHereAll = sn.cs.Base + '-set-here-all'
 sn.id.setFilterKeep = sn.cs.Base + '-set-filter-keep'
 
-fnModSet = function (sett) {
+const wildcardCheck = function(url, pattern) {
+  // Source: https://stackoverflow.com/a/51712612/1516015
+  const regExpEscape = function(s) {
+      return s.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&')
+  }
+  var patt = new RegExp('^' + pattern.split(/\*+/).map(regExpEscape).join('.*') + '$')
+  return url.match(patt) !== null && url.match(patt).length >= 1
+}
+
+const fnSetIsActive = function(sett, key) {
+  if (!sett) return false
+  if (!sett[key]) return false
+  if (!sett[key].active) return false
+  let urlMatch = false
+  $.each(sett[key].urls, function (url, s) {
+    urlMatch = urlMatch || wildcardCheck(window.location.pathname, url)
+  })
+  if (urlMatch) {
+    return true
+  }
+  return false
+}
+
+const fnModSet = function (sett) {
   console.log('foreground.js fnModSet', sett)
   if (sett == null || sett == undefined) {
     sett = {}
@@ -69,7 +92,8 @@ fnModSet = function (sett) {
       }
     })
   }
-  if (sett && sett.setToolbar && sett.setToolbar.active) {
+  
+  if (fnSetIsActive(sett, 'setToolbar')) {
     if ($('#' + sn.id.TbCont).length == 0) {
       $.ajax({
         'method' : 'GET',
@@ -95,7 +119,7 @@ fnModSet = function (sett) {
     $('#' + sn.id.TbCont).remove()
     $('#' + sn.id.TbStyle).remove()
   }
-  if (sett && sett.setCssPro && sett.setCssPro.active) {
+  if (fnSetIsActive(sett, 'setCssPro')) {
     if ($('#' + sn.id.Min).length == 0) {
       $.ajax({
         'method' : 'GET',
@@ -110,6 +134,9 @@ fnModSet = function (sett) {
     $('#' + sn.id.Min).remove()
   }
   $(['setHereBtn', 'setFilterKeep', 'setHereAll']).each(function (i, key) {
+    if (!fnSetIsActive(sett, key)) {
+      return false
+    }
     $('#' + sn.id[key]).remove()
     if (sett && sett[key] && sett[key].active) {
       $('body').append('<script id="' + sn.id[key] + '"></script>')
