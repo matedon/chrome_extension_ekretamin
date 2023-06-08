@@ -267,8 +267,10 @@ if (brigeDATA.setResAvg.active && $('.TanuloErtekelesGrid').length) {
     })
     const osszeg = erts.reduce((a, b) => a + b, 0)
     const atlag = osszeg / erts.length
-    $tr.find('.atlag ').html(atlag.toFixed(2)).addClass(sn.cs.High)
-    
+    $('<span></span>')
+      .html(atlag.toFixed(2))
+      .addClass(sn.cs.High)
+      .appendTo($tr.find('.atlag '))
   })
 }
 
