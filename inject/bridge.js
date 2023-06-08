@@ -1,3 +1,12 @@
+const wildcardCheck = function(url, pattern) {
+  // Source: https://stackoverflow.com/a/51712612/1516015
+  const regExpEscape = function(s) {
+      return s.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&')
+  }
+  var patt = new RegExp('^' + pattern.split(/\*+/).map(regExpEscape).join('.*') + '$')
+  return url.match(patt) !== null && url.match(patt).length >= 1
+}
+
 /*!
  * Required:
  * https://github.com/pie6k/jquery.initialize/blob/master/LICENSE
@@ -192,18 +201,17 @@ const fnToolbar = function () {
   })
 }
 $().ready(function () {
-  $.initialize('.' + sn.cs.TbRow, function () {
+  $.initialize('[data-url-match]', function () {
     const $row = $(this)
     const rowData = $row.data()
     if (rowData && rowData.urlMatch) {
       const matches = rowData.urlMatch.split(' ')
-      const results = []
+      let urlMatch = false
       $.each(matches, function (i, patt) {
-        const regex = patt.replace(/\*/g, "[^ ]*");
-        const match = (window.location.href).match(regex) ? true : false
-        results.push(match)
+        const check = wildcardCheck(window.location.pathname, patt)
+        urlMatch = urlMatch || check
       })
-      if (results.indexOf(true) == 0) {
+      if (urlMatch) {
         $row.removeClass(swVersion + '-hidden')
       }
     }
@@ -215,40 +223,42 @@ $().ready(function () {
   }
 })
 
-$.initialize('.mulasztasGridColumnHeaderJelen', function () {
-  const $th = $(this)
-  const $tp = $th.parent()
-  const $mn = $tp.closest('#MulasztasokNaplozasaGrid')
-  fnSmartCheck = function () {
-    $mn
-    .find('[data-inputparentgrid="MulasztasokNaplozasaGrid"]')
-    .each(function () {
-      const $self = $(this)
-      const $act = $self.find('.activebar')
-      if ($act.length == 0) {
-        $self.find('li[val=1498]').trigger('click')
-      }
-    })
-  }
-  if (brigeDATA.setHereBtn.active) {
-    $tp.find('.mulasztasGridColumnHeader').addClass(swVersion + '-mulasztasGridColumnHeader')
-    $tp.find('.mulasztasGridColumnHeaderJelen').text('Jelen').css('width', 'auto')
-    $tp.find('.mulasztasGridColumnHeaderUres').text('Üres').css('width', 'auto')
-    $('<div>Okos</div>')
-    .addClass('mulasztasGridColumnHeader')
-    .addClass(swVersion + '-mulasztasGridColumnHeader')
-    .addClass(swVersion + '-mulasztasGridColumnHeader-smart')
-    .on('click.' + swVersion, fnSmartCheck)
-    .appendTo($tp)
-  }
-  let time
-  if (brigeDATA.setHereAll.active) {
-    $.initialize('[data-inputparentgrid="MulasztasokNaplozasaGrid"]', function () {
-      clearTimeout(time)
-      time = setTimeout(fnSmartCheck, 300)
-    })
-  }
-})
+if (brigeDATA.setHereBtn.active || brigeDATA.setHereAll.active) {
+  $.initialize('.mulasztasGridColumnHeaderJelen', function () {
+    const $th = $(this)
+    const $tp = $th.parent()
+    const $mn = $tp.closest('#MulasztasokNaplozasaGrid')
+    fnSmartCheck = function () {
+      $mn
+      .find('[data-inputparentgrid="MulasztasokNaplozasaGrid"]')
+      .each(function () {
+        const $self = $(this)
+        const $act = $self.find('.activebar')
+        if ($act.length == 0) {
+          $self.find('li[val=1498]').trigger('click')
+        }
+      })
+    }
+    if (brigeDATA.setHereBtn.active) {
+      $tp.find('.mulasztasGridColumnHeader').addClass(swVersion + '-mulasztasGridColumnHeader')
+      $tp.find('.mulasztasGridColumnHeaderJelen').text('Jelen').css('width', 'auto')
+      $tp.find('.mulasztasGridColumnHeaderUres').text('Üres').css('width', 'auto')
+      $('<div>Okos</div>')
+      .addClass('mulasztasGridColumnHeader')
+      .addClass(swVersion + '-mulasztasGridColumnHeader')
+      .addClass(swVersion + '-mulasztasGridColumnHeader-smart')
+      .on('click.' + swVersion, fnSmartCheck)
+      .appendTo($tp)
+    }
+    let time
+    if (brigeDATA.setHereAll.active) {
+      $.initialize('[data-inputparentgrid="MulasztasokNaplozasaGrid"]', function () {
+        clearTimeout(time)
+        time = setTimeout(fnSmartCheck, 300)
+      })
+    }
+  })
+}
 
 if (brigeDATA.setResAvg.active && $('.TanuloErtekelesGrid').length) {
   $.initialize('.k-master-row', function () {
