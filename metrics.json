@@ -23,6 +23,12 @@
         },
         "active": false
     },
+    "setResAvg": {
+        "urls": {
+            "/TanuloErtekeles*": true
+        },
+        "active": false
+    },
     "setFilterKeep": {
         "urls": {
             "/Orarend/AdminOsztalyOrarend": {

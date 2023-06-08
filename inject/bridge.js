@@ -67,6 +67,7 @@ sn.cs.TbDay = sn.cs.Tb + '-day'
 sn.cs.TbDays = sn.cs.Tb + '-days'
 sn.cs.TbTbtn = sn.cs.Tb + '-toggle-btn'
 sn.cs.Cell = sn.cs.Base + '-cell'
+sn.cs.High = sn.cs.Base + '-highlight'
 
 const findFilterStack = []
 
@@ -248,6 +249,28 @@ $.initialize('.mulasztasGridColumnHeaderJelen', function () {
     })
   }
 })
+
+if (brigeDATA.setResAvg.active && $('.TanuloErtekelesGrid').length) {
+  $.initialize('.k-master-row', function () {
+    const $tr = $(this)
+    const $dt = $tr.find('[data-tanulonev]')
+    const dt = $dt.data()
+    if (!dt || !dt.hasOwnProperty('tanulonev')) return this
+    const erts = []
+    $tr.find('[data-tanuloertekelesid]').each(function () {
+      const $ert = $(this)
+      const de = $ert.data()
+      if (!de || !de.hasOwnProperty('tanuloertekeles')) return this
+      ert = de.tanuloertekeles.replace(/\D/g,'')
+      if (!ert.length) return this
+      erts.push(ert * 1)
+    })
+    const osszeg = erts.reduce((a, b) => a + b, 0)
+    const atlag = osszeg / erts.length
+    $tr.find('.atlag ').html(atlag.toFixed(2)).addClass(sn.cs.High)
+    
+  })
+}
 
 
 const findFilterOra = function () {

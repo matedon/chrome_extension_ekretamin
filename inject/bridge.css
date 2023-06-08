@@ -8,3 +8,6 @@
 #MulasztasokNaplozasaGrid .swVersion-mulasztasGridColumnHeader-smart {
     background-color: rgb(186, 218, 85);
 }
+.swVersion-highlight {
+    background-color: rgb(247 250 149) !important;
+}
