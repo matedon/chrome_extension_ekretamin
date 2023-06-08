@@ -55,6 +55,7 @@ sn.cs.TbClose = sn.cs.Tb + '-btn-close'
 sn.cs.TbBtnAct = sn.cs.Tb + '-btn-active'
 sn.cs.TbNap = sn.cs.Tb + '-btn-nap'
 sn.cs.TbDev = sn.cs.Tb + '-btn-dev'
+sn.cs.TbInv = sn.cs.Tb + '-btn-inv'
 sn.cs.TbFil = sn.cs.Tb + '-filter'
 sn.cs.TbNth = sn.cs.Tb + '-nth'
 sn.cs.TbFind = sn.cs.Tb + '-find'
@@ -64,6 +65,7 @@ sn.cs.TbDone = sn.cs.Base + '-done'
 sn.cs.TbVal = sn.cs.Tb + '-kij'
 sn.cs.TbDay = sn.cs.Tb + '-day'
 sn.cs.TbDays = sn.cs.Tb + '-days'
+sn.cs.TbTbtn = sn.cs.Tb + '-toggle-btn'
 sn.cs.Cell = sn.cs.Base + '-cell'
 
 const findFilterStack = []
@@ -141,7 +143,7 @@ const fnToolbar = function () {
     findFilterStack.length = 0
     fnObsDisconnect()
   })
-  $body.on('click', '.' + sn.cs.TbDays, function () {
+  $body.on('click', '.' + sn.cs.TbTbtn, function () {
     $(this).toggleClass(sn.cs.TbBtnAct)
   })
   $body.on('click', '.' + sn.cs.TbClr, function () {
@@ -262,47 +264,45 @@ const findFilterOra = function () {
   const nthVal = $('.' + sn.cs.TbNth).val()
   let nth = nthVal.length ? nthVal.split(',') : []
   const noTema = $('.' + sn.cs.TbDone).val()[0]
+  const isInverted = $('.' + sn.cs.TbInv).hasClass(sn.cs.TbBtnAct)
   const $orak = $mindenOra.filter(function () {
     const $ora = $(this)
     const oraData = $ora.data()
     let ret = []
     if (oraData.fcSeg.start && dayNums && dayNums.length) {
-    const dayStart = (new Date(oraData.fcSeg.start)).getDay() - 1
-    if (dayNums.indexOf(dayStart) > -1) {
-      ret[0] = true
-    } else {
-      ret[0] = false
-    }
-    } else {
-      ret[0] = true
+      const dayStart = (new Date(oraData.fcSeg.start)).getDay() - 1
+      if (dayNums.indexOf(dayStart) > -1) {
+        ret.push(true)
+      } else {
+        ret.push(false)
+      }
     }
     if (fil.length) {
       if ($ora.text().toLowerCase().includes(fil)) {
-        ret[1] = true
+        ret.push(true)
       } else {
-        ret[1] = false
+        ret.push(false)
       }
-    } else {
-      ret[1] = true
     }
     if (nth.length) {
       if (nth.includes(oraData.fcSeg.event.hanyadikora + '')) {
-        ret[2] = true
+        ret.push(true)
       } else {
-        ret[2] = false
+        ret.push(false)
       }
-    } else {
-      ret[2] = true
     }
     if (noTema && noTema.length) {
       if ((noTema == '0' && oraData.fcSeg.event.colorEnum == 6) ||
         (noTema == '1' && oraData.fcSeg.event.colorEnum == 9)) {
-        ret[3] = true
+        ret.push(true)
       } else {
-        ret[3] = false
+        ret.push(false)
       }
-    } else {
-      ret[3] = true
+    }
+    if (isInverted) {
+      $.each(ret, function (k, rr) {
+        ret[k] = ! ret[k]
+      })
     }
     let ret_all = true
     $.each(ret, function (k, rr) {
