@@ -271,6 +271,7 @@ if (brigeDATA.setResAvg.active && $('.TanuloErtekelesGrid').length) {
       const $ert = $(this)
       const de = $ert.data()
       if (!de || !de.hasOwnProperty('tanuloertekeles')) return this
+      if (typeof de.tanuloertekeles !== 'string') return this
       ert = de.tanuloertekeles.replace(/\D/g,'')
       if (!ert.length) return this
       erts.push(ert * 1)
