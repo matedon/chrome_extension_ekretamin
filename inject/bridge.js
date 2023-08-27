@@ -253,7 +253,8 @@ if (brigeDATA.setHereBtn.active || brigeDATA.setHereAll.active) {
     let time
     if (brigeDATA.setHereAll.active) {
       $.initialize('[data-inputparentgrid="MulasztasokNaplozasaGrid"]', function () {
-        if ($('.' + sn.cs.TbPres).is(':visible') && $('.' + sn.cs.TbPres).val()[0] == '3') {
+        const tbPresVal_ = $('.' + sn.cs.TbPres).val()[0]
+        if ($('.' + sn.cs.TbPres).is(':visible') && (tbPresVal_ == '3' || tbPresVal_ == '4')) {
           return this
         }
         clearTimeout(time)
@@ -428,7 +429,6 @@ const napNextOra = function () {
       .trigger('keyup')
       .trigger('focusout')
     const tbPresVal_ = $('.' + sn.cs.TbPres).val()[0]
-    console.log('tbPresVal_', tbPresVal_)
     // console.log('#tanoraMuveletWindow', $('.' + sn.cs.TbPres).val()[0], $dial.find('#MulasztasokNaplozasaGrid'))
     if (tbPresVal_== '1') {
       $grid.find('.mulasztasGridColumnHeaderJelen').trigger('click')
@@ -446,6 +446,9 @@ const napNextOra = function () {
     }
     if (tbPresVal_== '3') {
       // Do noting!
+    }
+    if (tbPresVal_== '4') {
+      $grid.find('.mulasztasGridColumnHeaderUres').trigger('click')
     }
     let submitTimer = setTimeout(function () {
       $dial.find('#naplozas').trigger('click')
