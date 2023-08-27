@@ -253,8 +253,7 @@ if (brigeDATA.setHereBtn.active || brigeDATA.setHereAll.active) {
     let time
     if (brigeDATA.setHereAll.active) {
       $.initialize('[data-inputparentgrid="MulasztasokNaplozasaGrid"]', function () {
-        const tbPresVal_ = $('.' + sn.cs.TbPres).val()[0]
-        if ($('.' + sn.cs.TbPres).is(':visible') && (tbPresVal_ == '3' || tbPresVal_ == '4')) {
+        if (sn.cs.TbNap.hasClass(sn.cs.Cell)) {
           return this
         }
         clearTimeout(time)
